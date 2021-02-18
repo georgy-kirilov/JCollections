@@ -2,6 +2,7 @@ package manual;
 
 import coolcollections.lists.ArrayList;
 import coolcollections.lists.List;
+import models.Person;
 
 import java.util.Arrays;
 
@@ -21,6 +22,23 @@ public class QueryableManualTest
         numbers.add(-5);
 
         output = numbers.sortByDesc(n -> n * n).reverse().toString();
+        System.out.println(output);
+
+        List<Person> people = new ArrayList<>(new Person[]
+        {
+            new Person("Ivan", 25, true),
+            new Person("Simeon", 34, true),
+            new Person("Anna", 40, false),
+            new Person("John", 15, true),
+            new Person("Jane", 12, false),
+        });
+
+        output = people.where(p -> p.getAge() >= 18 && p.isMale())
+                    .foreach(p -> p.setName(p.getName().toUpperCase()))
+                    .sortByDesc(p -> p.getAge())
+                    .select(p -> String.format("%s, %d", p.getName(), p.getAge()))
+                    .joinBy("\n");
+
         System.out.println(output);
     }
 }
