@@ -41,15 +41,18 @@ public abstract class QueryableCollection<TSource> implements Queryable<TSource>
     {
         separator = separator == null ? ", " : separator;
         StringBuilder sb = new StringBuilder();
-        sb.append("{ ");
+
         for (TSource item : this)
         {
             sb.append(item);
             sb.append(separator);
         }
         String result = sb.toString();
-        result = result.substring(0, result.length() - separator.length()) + " }";
-        return result;
+        if (result.length() >= separator.length())
+        {
+            result = result.substring(0, result.length() - separator.length());
+        }
+        return String.format("[%s]", result);
     }
 
     @Override
