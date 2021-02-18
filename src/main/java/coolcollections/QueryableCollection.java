@@ -41,7 +41,6 @@ public abstract class QueryableCollection<TSource> implements Queryable<TSource>
     {
         separator = separator == null ? ", " : separator;
         StringBuilder sb = new StringBuilder();
-
         for (TSource item : this)
         {
             sb.append(item);
@@ -52,13 +51,13 @@ public abstract class QueryableCollection<TSource> implements Queryable<TSource>
         {
             result = result.substring(0, result.length() - separator.length());
         }
-        return String.format("[%s]", result);
+        return result;
     }
 
     @Override
     public List<TSource> toList()
     {
-        List<TSource> list = new ArrayList<>(this.count());
+        List<TSource> list = new ArrayList<>();
         for (TSource item : this)
         {
             list.add(item);
@@ -140,7 +139,7 @@ public abstract class QueryableCollection<TSource> implements Queryable<TSource>
     @Override
     public Queryable<TSource> where(Predicate<TSource> filter)
     {
-        List<TSource> items = new ArrayList<>(this.count());
+        List<TSource> items = new ArrayList<>();
         for (TSource item : this)
         {
             if (filter.apply(item))
@@ -154,7 +153,7 @@ public abstract class QueryableCollection<TSource> implements Queryable<TSource>
     @Override
     public <TOut> Queryable<TOut> select(TinyFunc<TSource, TOut> selector)
     {
-        List<TOut> items = new ArrayList<>(this.count());
+        List<TOut> items = new ArrayList<>();
         for (TSource item : this)
         {
             items.add(selector.apply(item));
@@ -175,12 +174,42 @@ public abstract class QueryableCollection<TSource> implements Queryable<TSource>
     @Override
     public <TKey extends Comparable<TKey>> Queryable<TSource> sortBy(TinyFunc<TSource, TKey> keySelector)
     {
-        throw new UnsupportedOperationException();
+        List<TSource> list = this.toList();
+        this.sort(keySelector, list, true);
+        return list;
     }
 
     @Override
     public <TKey extends Comparable<TKey>> Queryable<TSource> sortByDesc(TinyFunc<TSource, TKey> keySelector)
     {
-        throw new UnsupportedOperationException();
+        List<TSource> list = this.toList();
+        this.sort(keySelector, list, false);
+        return list;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("[%s]", this.join());
+    }
+
+    private <TKey extends Comparable<TKey>> void sort(TinyFunc<TSource, TKey> keySelector, List<TSource> list, boolean ascending)
+    {
+        for (int i = 0; i < list.count() - 1; i++)
+        {
+            for (int k = i + 1; k < list.count(); k++)
+            {
+                TSource current = list.get(i);
+                TSource next = list.get(k);
+                boolean shouldSwap = ascending && keySelector.apply(current).compareTo(keySelector.apply(next)) > 0 ||
+                        !ascending && keySelector.apply(current).compareTo(keySelector.apply(next)) < 0;
+
+                if (shouldSwap)
+                {
+                    list.set(i, next);
+                    list.set(k, current);
+                }
+            }
+        }
     }
 }
