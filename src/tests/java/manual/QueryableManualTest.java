@@ -16,11 +16,11 @@ public class QueryableManualTest
         System.out.println(output);
 
         List<Integer> numbers = new ArrayList<>();
-        numbers.addAll(Arrays.asList(new Integer[]{ 10, 2, 6, 1, 5}));
+        numbers.addAll(Arrays.asList(new Integer[]{ 10, 2, 6, 1, 5, 0}));
         numbers.add(15);
         numbers.add(-5);
 
-        output = numbers.sortByDesc(n -> n * n).toString();
+        output = numbers.sortByDesc(n -> n * n).reverse().toString();
         System.out.println(output);
     }
 }

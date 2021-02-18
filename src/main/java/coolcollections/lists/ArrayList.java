@@ -171,6 +171,12 @@ public class ArrayList<T> extends QueryableCollection<T> implements List<T>
         return this.count;
     }
 
+    @Override
+    public List<T> toList()
+    {
+        return this;
+    }
+
     public int capacity()
     {
         return this.array.length;

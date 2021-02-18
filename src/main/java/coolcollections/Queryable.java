@@ -13,6 +13,7 @@ public interface Queryable<TSource> extends Iterable<TSource>
     String join();
     String joinBy(String separator);
     List<TSource> toList();
+    Queryable<TSource> reverse();
     boolean contains(TSource item);
     boolean containsAll(Iterable<TSource> collection);
     boolean all(Predicate<TSource> filter);

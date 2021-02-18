@@ -66,6 +66,20 @@ public abstract class QueryableCollection<TSource> implements Queryable<TSource>
     }
 
     @Override
+    public Queryable<TSource> reverse()
+    {
+        List<TSource> list = this.toList();
+        int end = list.count() - 1;
+        for (int i = 0; i < list.count() / 2; i++)
+        {
+            TSource current = list.get(i);
+            list.set(i, list.get(end - i));
+            list.set(end - i, current);
+        }
+        return list;
+    }
+
+    @Override
     public boolean contains(TSource item)
     {
         for (TSource current : this)
