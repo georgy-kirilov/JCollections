@@ -10,6 +10,8 @@ public interface Queryable<TSource> extends Iterable<TSource>
     void clear();
     int count();
     boolean isEmpty();
+    String join();
+    String joinBy(String separator);
     List<TSource> toList();
     boolean contains(TSource item);
     boolean containsAll(Iterable<TSource> collection);

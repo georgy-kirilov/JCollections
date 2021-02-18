@@ -31,6 +31,28 @@ public abstract class QueryableCollection<TSource> implements Queryable<TSource>
     }
 
     @Override
+    public String join()
+    {
+        return this.joinBy(null);
+    }
+
+    @Override
+    public String joinBy(String separator)
+    {
+        separator = separator == null ? ", " : separator;
+        StringBuilder sb = new StringBuilder();
+        sb.append("{ ");
+        for (TSource item : this)
+        {
+            sb.append(item);
+            sb.append(separator);
+        }
+        String result = sb.toString();
+        result = result.substring(0, result.length() - separator.length()) + " }";
+        return result;
+    }
+
+    @Override
     public List<TSource> toList()
     {
         List<TSource> list = new ArrayList<>(this.count());
