@@ -2,7 +2,7 @@ package coolcollections.lists;
 
 import coolcollections.Queryable;
 
-public interface List<T>
+public interface List<T> extends Queryable<T>
 {
     void add(T item);
     void addAll(Iterable<T> collection);

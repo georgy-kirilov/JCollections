@@ -63,8 +63,5 @@ public abstract class QueryableCollection<TSource> implements Queryable<TSource>
     }
 
     @Override
-    public Iterator<TSource> iterator()
-    {
-        throw new UnsupportedOperationException();
-    }
+    public abstract Iterator<TSource> iterator();
 }
