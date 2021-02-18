@@ -64,6 +64,9 @@ public class ArrayListManualTest
         {
             System.out.println("subList() throws error correctly");
         }
+
+        list = list.where(x -> x % 2 == 0).toList();
+        printList(list);
     }
 
     static <T> void printList(List<T> list)

@@ -12,8 +12,5 @@ public interface List<T> extends Queryable<T>
     boolean remove(T item);
     T removeAt(int index);
     int indexOf(T item);
-    void clear();
-    boolean contains(T item);
-    boolean containsAll(Iterable<T> collection);
     List<T> subList(int startIndex, int endIndex);
 }

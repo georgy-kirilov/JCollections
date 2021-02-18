@@ -3,6 +3,7 @@ package coolcollections.lists;
 import coolcollections.QueryableCollection;
 import coolcollections.Helper;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class ArrayList<T> extends QueryableCollection<T> implements List<T>
@@ -11,6 +12,11 @@ public class ArrayList<T> extends QueryableCollection<T> implements List<T>
 
     private T[] array;
     private int count;
+
+    public ArrayList(T[] array)
+    {
+        this(Arrays.asList(array));
+    }
 
     public ArrayList(Iterable<T> collection)
     {
@@ -34,11 +40,11 @@ public class ArrayList<T> extends QueryableCollection<T> implements List<T>
     @Override
     public void add(T item)
     {
-        if (this.count >= this.capacity())
+        if (this.count() >= this.capacity())
         {
             this.expand();
         }
-        this.array[this.count] = item;
+        this.array[this.count()] = item;
         this.count++;
     }
 
@@ -55,11 +61,11 @@ public class ArrayList<T> extends QueryableCollection<T> implements List<T>
     public void insert(int index, T item)
     {
         this.throwIfOutOfRange(index);
-        if (this.count >= this.capacity())
+        if (this.count() >= this.capacity())
         {
             this.expand();
         }
-        for (int i = this.count; i > index; i--)
+        for (int i = this.count(); i > index; i--)
         {
             this.array[i] = this.array[i - 1];
         }
@@ -97,7 +103,7 @@ public class ArrayList<T> extends QueryableCollection<T> implements List<T>
     public T removeAt(int index)
     {
         T removed = this.get(index);
-        for (int i = index; i < this.count - 1; i++)
+        for (int i = index; i < this.count() - 1; i++)
         {
             this.array[i] = this.array[i + 1];
         }
@@ -108,7 +114,7 @@ public class ArrayList<T> extends QueryableCollection<T> implements List<T>
     @Override
     public int indexOf(T item)
     {
-        for (int i = 0; i < this.count; i++)
+        for (int i = 0; i < this.count(); i++)
         {
             if (Helper.areEqual(this.array[i], item))
             {
@@ -116,39 +122,6 @@ public class ArrayList<T> extends QueryableCollection<T> implements List<T>
             }
         }
         return -1;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void clear()
-    {
-        this.array = (T[]) new Object[INITIAL_CAPACITY];
-        this.count = 0;
-    }
-
-    @Override
-    public boolean contains(T item)
-    {
-        return this.indexOf(item) >= 0;
-    }
-
-    @Override
-    public boolean containsAll(Iterable<T> collection)
-    {
-        boolean allExist = false;
-        for (T current : collection)
-        {
-            allExist = false;
-            for (T next : this)
-            {
-                if (Helper.areEqual(current, next))
-                {
-                    allExist = true;
-                    break;
-                }
-            }
-        }
-        return allExist;
     }
 
     @Override
@@ -162,6 +135,14 @@ public class ArrayList<T> extends QueryableCollection<T> implements List<T>
         return subList;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public void clear()
+    {
+        this.array = (T[]) new Object[INITIAL_CAPACITY];
+        this.count = 0;
+    }
+
     @Override
     public Iterator<T> iterator()
     {
@@ -172,19 +153,18 @@ public class ArrayList<T> extends QueryableCollection<T> implements List<T>
             @Override
             public boolean hasNext()
             {
-                return index < count();
+                return this.index < count();
             }
 
             @Override
             public T next()
             {
                 T next = array[index];
-                index++;
+                this.index++;
                 return next;
             }
         };
     }
-
     @Override
     public int count()
     {
@@ -209,7 +189,7 @@ public class ArrayList<T> extends QueryableCollection<T> implements List<T>
 
     private void throwIfOutOfRange(int index)
     {
-        if (index < 0 || index >= this.count)
+        if (index < 0 || index >= this.count())
         {
             throw new IllegalArgumentException("Index was outside the list bounds");
         }
